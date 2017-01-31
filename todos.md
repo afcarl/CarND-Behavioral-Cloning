@@ -1,0 +1,7 @@
+- flip data/images for twice as much data
+- smooth smooth folder. thinking -2 | +2 
+- use all 3 images through the frist lays of vgg or alexnet 
+- combine 3 images and train network with some fully conneted layers
+- review nividia paper
+- read other paper
+- set up saving data to s3
