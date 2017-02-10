@@ -24,7 +24,7 @@ def put_driving_data():
 	s3.upload(zipfile_name)
 
 def get_driving_data():
-	s3.download(zipfile_name, data_folder)
+	s3.download(zipfile_name)
 
 	print("Unzipping file", zipfile_name)
 	zip_ref = zipfile.ZipFile(zipfile_path, 'r')

@@ -17,11 +17,11 @@ def upload(rel_path):
 	bucket.upload_file(full_path(rel_path), key_name + rel_path, Callback=UploadProgressPercentage(rel_path))
 	print("Finished uploading file", zipfile_name)
 
-def download(rel_path, rel_destination):
+def download(rel_path):
 	bucket = boto3.resource('s3', region_name=region_name).Bucket(bucket_name)
 
 	print("Downloading file", rel_path)
-	bucket.download_file(key_name + rel_path, full_path(rel_destination), Callback=DownloadProgressPercentage(rel_path))
+	bucket.download_file(key_name + rel_path, full_path(rel_path), Callback=DownloadProgressPercentage(rel_path))
 	print("Finished downloading file", zipfile_name)
 
 class UploadProgressPercentage(object):

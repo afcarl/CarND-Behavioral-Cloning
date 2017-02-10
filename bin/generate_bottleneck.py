@@ -19,7 +19,7 @@ flags.DEFINE_integer('batch_size', 32, 'The batch size for the generator')
 def main(_):
 	print("Using batchsize", FLAGS.batch_size)
 	create_bottleneck_model(FLAGS.dataset, FLAGS.batch_size)
-	save_bottleneck_model(FLAGS.dataset)
+	save_bottleneck_model(FLAGS.dataset, FLAGS.batch_size)
 
 if __name__ == '__main__':
 	tf.app.run()
