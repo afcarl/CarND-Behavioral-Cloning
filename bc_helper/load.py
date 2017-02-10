@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import os
 from bc_helper.simulator_data import SimulatorData
+from bc_helper.full_path import full_path
 
 def load_simple_data():
 	data_frame_folder = 'data_frames'
@@ -32,7 +33,7 @@ def load_smooth_data():
 	if os.path.isfile(absolute_data_frame_file) == False:
 		df = create_smooth_data_frame()
 		df.to_csv(absolute_data_frame_file)
-		
+
 	return pd.read_csv(absolute_data_frame_file)
 
 def _all_original_data():
@@ -56,12 +57,6 @@ def _original_data_frame(folders):
 
 def full_data_path(name):
 	return full_path("data/{}".format(name))
-
-def full_path(name):
-	base_dir_name = "CarND-Behavioral-Cloning"
-	base_dir_list = os.getcwd().split("/")
-	i = base_dir_list.index(base_dir_name)
-	return "/".join(base_dir_list[0:i+1]) + "/" + name
 
 def create_smooth_data_frame():
 	df = _original_smooth_data()
