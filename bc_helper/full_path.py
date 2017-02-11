@@ -1,4 +1,5 @@
 #!/bin/python
+import os
 
 def full_path(name):
 	base_dir_name = "CarND-Behavioral-Cloning"

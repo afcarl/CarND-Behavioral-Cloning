@@ -42,7 +42,7 @@ def create_bottleneck_model(dataset, batch_size):
 	else:
 		raise Exception("Unexpected dataset:", dataset)
 
-	train_output_file, validation_output = files(dataset, batch_size)
+	train_output_file, validation_output_file = files(dataset, batch_size)
 
 	print("Saving to ...")
 	print(train_output_file)

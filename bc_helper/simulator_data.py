@@ -3,6 +3,7 @@
 import numpy as np
 from sklearn.model_selection import ShuffleSplit
 from keras.preprocessing.image import img_to_array, load_img
+from bc_helper.full_path import full_path
 
 class SimulatorData(object):
 	def __init__(self, data_frame, batch_size=32):
@@ -27,7 +28,7 @@ class SimulatorData(object):
 		return [self.img(i) for i in indices]
 
 	def img(self, index):
-		return img_to_array(load_img(self._df['center'][index]))
+		return img_to_array(load_img(self._convertLocalAbsolutePath(self._df['center'][index])))
 
 	def train_labels(self):
 		return self.labels(self.train_indices)
@@ -40,6 +41,11 @@ class SimulatorData(object):
 
 	def validation_generator(self):
 		return BatchGenerator(self, is_train=False)
+
+	# Useful when on aws
+	def _convertLocalAbsolutePath(self, path):
+		return full_path(path.split("/CarND-Behavioral-Cloning/")[1])
+
 
 class BatchGenerator:
 	def __init__(self, data, is_train=True):
@@ -56,14 +62,3 @@ class BatchGenerator:
 
 	def __next__(self):
 		return self.next()
-
-
-
-
-
-
-
-
-
-
-
