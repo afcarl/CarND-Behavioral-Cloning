@@ -2,3 +2,4 @@
 .DS_Store
 data/
 *.zip
+bc_helper/__pycache__*
