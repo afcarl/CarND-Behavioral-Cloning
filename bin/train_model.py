@@ -7,6 +7,7 @@ project_path, x = os.path.split(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(project_path)
 
 from bc_helper.load import load_simple_data
+from bc_helper.load import load_starter_data
 from bc_helper.simulator_data import SimulatorData
 from bc_helper.full_path import full_path
 from bc_helper import s3
