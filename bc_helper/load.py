@@ -73,8 +73,8 @@ def _original_data_frame(folders):
 					frames.append(pd.read_csv(s_path + "/" + csv_name, names=columns)[['steering', 'center', 'left', 'right']])
 		else:
 			s_path = full_data_path(folder)
-				if os.path.isdir(s_path):
-					frames.append(pd.read_csv(s_path + "/" + csv_name, names=columns)[['steering', 'center', 'left', 'right']])
+			if os.path.isdir(s_path):
+				frames.append(pd.read_csv(s_path + "/" + csv_name, names=columns)[['steering', 'center', 'left', 'right']])
 
 
 	data_frame = pd.concat(frames, ignore_index=True)
