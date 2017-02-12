@@ -66,10 +66,16 @@ def _original_data_frame(folders):
 	columns = ['center','left','right','steering','throttle','brake','speed']
 	frames = []
 	for folder in folders:
-		for subfolder in os.listdir(full_data_path(folder)):
-			s_path = full_data_path("{}/{}".format(folder, subfolder))
-			if os.path.isdir(s_path):
-				frames.append(pd.read_csv(s_path + "/" + csv_name, names=columns)[['steering', 'center', 'left', 'right']])
+		if folder != "starter_data":
+			for subfolder in os.listdir(full_data_path(folder)):
+				s_path = full_data_path("{}/{}".format(folder, subfolder))
+				if os.path.isdir(s_path):
+					frames.append(pd.read_csv(s_path + "/" + csv_name, names=columns)[['steering', 'center', 'left', 'right']])
+		else:
+			s_path = full_data_path(folder)
+				if os.path.isdir(s_path):
+					frames.append(pd.read_csv(s_path + "/" + csv_name, names=columns)[['steering', 'center', 'left', 'right']])
+
 
 	data_frame = pd.concat(frames, ignore_index=True)
 	return data_frame.reindex()
