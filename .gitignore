@@ -3,3 +3,4 @@
 data/
 *.zip
 bc_helper/__pycache__*
+*.p
