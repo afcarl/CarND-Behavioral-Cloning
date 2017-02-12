@@ -30,7 +30,7 @@ def main(_):
 	if FLAGS.dataset == "original":
 		data_frame = load_simple_data()
 	elif FLAGS.dataset == "starter_data":
-		data_frame = load_simple_data()
+		data_frame = load_starter_data()
 	else:
 		raise Exception("Unexpected dataset:", dataset)
 		

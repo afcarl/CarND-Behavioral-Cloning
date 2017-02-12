@@ -57,7 +57,7 @@ class BatchGenerator:
 		last_index = len(self.indices)
 		start_index = self.batch_index
 		end_index = min(self.batch_index + self.data.batch_size, last_index)
-		self.batch_index = end_index
+		self.batch_index = end_index if end_index < last_index else 0
 		return (np.array(self.data.features(self.indices[start_index:end_index])), np.array(self.data.labels(self.indices[start_index:end_index])))
 
 	def __next__(self):
