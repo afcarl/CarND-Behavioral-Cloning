@@ -6,51 +6,32 @@ import os
 from bc_helper.simulator_data import SimulatorData
 from bc_helper.full_path import full_path
 
+def _load_df(file, df_loader):
+	data_frame_folder = 'data_frames'
+	data_frame_file = file
+	absolute_data_frame_folder = full_data_path(data_frame_folder)
+	absolute_data_frame_file = full_data_path(data_frame_folder + "/" + data_frame_file)
+
+	if os.path.isdir(absolute_data_frame_folder) == False:
+		os.mkdir(absolute_data_frame_folder)
+
+	if os.path.isfile(absolute_data_frame_file) == False:
+		df = df_loader()
+		df.to_csv(absolute_data_frame_file)
+
+	return pd.read_csv(absolute_data_frame_file)
+
 def load_simple_data():
-	data_frame_folder = 'data_frames'
-	data_frame_file = 'original'
-	absolute_data_frame_folder = full_data_path(data_frame_folder)
-	absolute_data_frame_file = full_data_path(data_frame_folder + "/" + data_frame_file)
-
-	if os.path.isdir(absolute_data_frame_folder) == False:
-		os.mkdir(absolute_data_frame_folder)
-
-	if os.path.isfile(absolute_data_frame_file) == False:
-		df = _all_original_data()
-		df.to_csv(absolute_data_frame_file)
-
-	return pd.read_csv(absolute_data_frame_file)
-
-def load_starter_data():
-	data_frame_folder = 'data_frames'
-	data_frame_file = 'starter_data'
-
-	absolute_data_frame_folder = full_data_path(data_frame_folder)
-	absolute_data_frame_file = full_data_path(data_frame_folder + "/" + data_frame_file)
-
-	if os.path.isdir(absolute_data_frame_folder) == False:
-		os.mkdir(absolute_data_frame_folder)
-
-	if os.path.isfile(absolute_data_frame_file) == False:
-		df = _all_starter_data()
-		df.to_csv(absolute_data_frame_file)
-
-	return pd.read_csv(absolute_data_frame_file)
+	return _load_df('original', _all_original_data)
 
 def load_smooth_data():
-	data_frame_folder = 'data_frames'
-	data_frame_file = 'smooth_steering'
-	absolute_data_frame_folder = full_data_path(data_frame_folder)
-	absolute_data_frame_file = full_data_path(data_frame_folder + "/" + data_frame_file)
+	return _load_df('smooth', create_smooth_data_frame)
 
-	if os.path.isdir(absolute_data_frame_folder) == False:
-		os.mkdir(absolute_data_frame_folder)
+def load_starter_data():
+	return _load_df('starter', _all_starter_data)
 
-	if os.path.isfile(absolute_data_frame_file) == False:
-		df = create_smooth_data_frame()
-		df.to_csv(absolute_data_frame_file)
-
-	return pd.read_csv(absolute_data_frame_file)
+def load_augmented_starter_data():
+	return _load_df('augmented_starter', _create_augmented_starter_data)
 
 def _all_original_data():
 	return _original_data_frame(['smooth', 'recovery'])
@@ -92,6 +73,26 @@ def create_smooth_data_frame():
 		new.append(np.mean(df['steering'][max(index - 5, 0):min(index + 5, length)]))
 	df['smooth_steering'] = new
 	return df
+
+def _create_augmented_starter_data():
+	steering_delta = 0.5
+	df = _all_starter_data()
+	print('len(df):', len(df))
+	left = []
+	right = []
+	center = []
+	for index, row in df.iterrows():
+	    left.append(pd.Series([row['steering'] - steering_delta, row['left']]))
+	    right.append(pd.Series([row['steering'] + steering_delta, row['right']]))
+	    center.append(pd.Series([row['steering'], row['center']]))
+	    
+	left = pd.DataFrame(left)
+	right = pd.DataFrame(right)
+	center = pd.DataFrame(center)
+	new = pd.concat([left, right, center])
+	new.columns = ['steering', 'center']
+	return new
+
 
 
 

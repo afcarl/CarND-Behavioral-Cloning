@@ -8,6 +8,7 @@ sys.path.append(project_path)
 
 from bc_helper.load import load_simple_data
 from bc_helper.load import load_starter_data
+from bc_helper.load import load_augmented_starter_data
 from bc_helper.simulator_data import SimulatorData
 from bc_helper.full_path import full_path
 from bc_helper import s3
@@ -32,6 +33,8 @@ def main(_):
 		data_frame = load_simple_data()
 	elif FLAGS.dataset == "starter_data":
 		data_frame = load_starter_data()
+	elif FLAGS.dataset == "augmented_starter":
+		data_frame = load_augmented_starter_data()
 	else:
 		raise Exception("Unexpected dataset:", dataset)
 		

@@ -47,7 +47,7 @@ class SimulatorData(object):
 		if path.find("/CarND-Behavioral-Cloning/") != -1:
 			rel_path = path.split("/CarND-Behavioral-Cloning/")[1]	
 		else:
-			rel_path = "data/starter_data/" + path
+			rel_path = "data/starter_data/" + path.strip()
 		return full_path(rel_path)
 
 
