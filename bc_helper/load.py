@@ -21,6 +21,22 @@ def load_simple_data():
 
 	return pd.read_csv(absolute_data_frame_file)
 
+def load_starter_data():
+	data_frame_folder = 'data_frames'
+	data_frame_file = 'starter_data'
+
+	absolute_data_frame_folder = full_data_path(data_frame_folder)
+	absolute_data_frame_file = full_data_path(data_frame_folder + "/" + data_frame_file)
+
+	if os.path.isdir(absolute_data_frame_folder) == False:
+		os.mkdir(absolute_data_frame_folder)
+
+	if os.path.isfile(absolute_data_frame_file) == False:
+		df = _all_starter_data()
+		df.to_csv(absolute_data_frame_file)
+
+	return pd.read_csv(absolute_data_frame_file)
+
 def load_smooth_data():
 	data_frame_folder = 'data_frames'
 	data_frame_file = 'smooth_steering'
@@ -41,6 +57,9 @@ def _all_original_data():
 
 def _original_smooth_data():
 	return _original_data_frame(['smooth'])
+
+def _all_starter_data():
+	return _original_data_frame(['starter_data'])
 
 def _original_data_frame(folders):
 	csv_name = 'driving_log.csv'
