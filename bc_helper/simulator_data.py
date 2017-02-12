@@ -44,7 +44,11 @@ class SimulatorData(object):
 
 	# Useful when on aws
 	def _convertLocalAbsolutePath(self, path):
-		return full_path(path.split("/CarND-Behavioral-Cloning/")[1])
+		if path.find("/CarND-Behavioral-Cloning/") != -1:
+			rel_path = path.split("/CarND-Behavioral-Cloning/")[1]	
+		else:
+			rel_path = "data/starter_data/" + path
+		return full_path(rel_path)
 
 
 class BatchGenerator:
@@ -57,7 +61,7 @@ class BatchGenerator:
 		last_index = len(self.indices)
 		start_index = self.batch_index
 		end_index = min(self.batch_index + self.data.batch_size, last_index)
-		self.batch_index = end_index if end_index < last_index else 0
+		self.batch_index = end_index if end_index < last_index else 0 # reset index when we get to the end
 		return (np.array(self.data.features(self.indices[start_index:end_index])), np.array(self.data.labels(self.indices[start_index:end_index])))
 
 	def __next__(self):
