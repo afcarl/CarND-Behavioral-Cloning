@@ -3,6 +3,7 @@
 import numpy as np
 from sklearn.model_selection import ShuffleSplit
 from keras.preprocessing.image import img_to_array, load_img
+import cv2
 from bc_helper.full_path import full_path
 
 class SimulatorData(object):
@@ -28,7 +29,11 @@ class SimulatorData(object):
 		return [self.img(i) for i in indices]
 
 	def img(self, index):
-		return img_to_array(load_img(self._convertLocalAbsolutePath(self._df['center'][index])))
+		image = img_to_array(load_img(self._convertLocalAbsolutePath(self._df['center'][index])))
+		if self._df['flip'] == True:
+			return cv2.flip(image, 0)
+		else:
+			return image
 
 	def train_labels(self):
 		return self.labels(self.train_indices)

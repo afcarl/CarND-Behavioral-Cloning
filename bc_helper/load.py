@@ -82,15 +82,18 @@ def _create_augmented_starter_data():
 	right = []
 	center = []
 	for index, row in df.iterrows():
-	    left.append(pd.Series([row['steering'] - steering_delta, row['left']]))
-	    right.append(pd.Series([row['steering'] + steering_delta, row['right']]))
-	    center.append(pd.Series([row['steering'], row['center']]))
+	    left.append(pd.Series([row['steering'] + steering_delta, row['left'], False]))
+	    left.append(pd.Series([row['steering'] + steering_delta, row['left'], True]))
+	    right.append(pd.Series([row['steering'] - steering_delta, row['right'], False]))
+	    right.append(pd.Series([row['steering'] - steering_delta, row['right'], True]))
+	    center.append(pd.Series([row['steering'], row['center'], False]))
+	    center.append(pd.Series([row['steering'], row['center'], True]))
 	    
 	left = pd.DataFrame(left)
 	right = pd.DataFrame(right)
 	center = pd.DataFrame(center)
 	new = pd.concat([left, right, center])
-	new.columns = ['steering', 'center']
+	new.columns = ['steering', 'center', 'flip']
 	return new
 
 
