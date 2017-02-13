@@ -77,7 +77,6 @@ def create_smooth_data_frame():
 def _create_augmented_starter_data():
 	steering_delta = 0.5
 	df = _all_starter_data()
-	print('len(df):', len(df))
 	left = []
 	right = []
 	center = []
