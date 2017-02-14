@@ -29,6 +29,8 @@ flags.DEFINE_string('dataset', 'original', "Make bottleneck features this for da
 flags.DEFINE_integer('batch_size', 32, 'The batch size for the generator.')
 flags.DEFINE_integer('epochs', 30, 'The number of epochs.')
 flags.DEFINE_boolean('save', False, 'Save the generated bottleneck model to S3.')
+flags.DEFINE_boolean('load_model', False, 'Load previously trained model.')
+flags.DEFINE_integer('initial_epoch', 0, 'Load previously trained model.')
 
 def main(_):
 	if FLAGS.dataset == "original":
@@ -55,25 +57,27 @@ def main(_):
 	# - FCC(d=100)
 	# - FCC(d=50)
 	# - FCC(d=10)
+	if FLAGS.load_model:
+		model = load_model(args.model)
+	else:
+		model = Sequential()
+		model.add(Cropping2D(cropping=((50,20), (0,0)), input_shape=data.feature_shape))
+		model.add(Lambda(lambda x: (x / 255.0) - 0.5))
+		model.add(Convolution2D(24, 5, 5, border_mode='same', activation='relu', subsample=(2, 2)))
+		model.add(Convolution2D(36, 5, 5, border_mode='same', activation='relu', subsample=(2, 2)))
+		model.add(Convolution2D(48, 5, 5, border_mode='same', activation='relu', subsample=(2, 2)))
+		model.add(Convolution2D(64, 3, 3, border_mode='same', activation='relu'))
+		model.add(Convolution2D(64, 3, 3, border_mode='same', activation='relu'))
+		model.add(Flatten())
+		model.add(Dense(100, activation='relu'))
+		model.add(Dropout(0.5))
+		model.add(Dense(50, activation='relu'))
+		model.add(Dropout(0.5))
+		model.add(Dense(10, activation='relu'))
+		model.add(Dropout(0.5))
+		model.add(Dense(1))
 
-	model = Sequential()
-	model.add(Cropping2D(cropping=((50,20), (0,0)), input_shape=data.feature_shape))
-	model.add(Lambda(lambda x: (x / 255.0) - 0.5))
-	model.add(Convolution2D(24, 5, 5, border_mode='same', activation='relu', subsample=(2, 2)))
-	model.add(Convolution2D(36, 5, 5, border_mode='same', activation='relu', subsample=(2, 2)))
-	model.add(Convolution2D(48, 5, 5, border_mode='same', activation='relu', subsample=(2, 2)))
-	model.add(Convolution2D(64, 3, 3, border_mode='same', activation='relu'))
-	model.add(Convolution2D(64, 3, 3, border_mode='same', activation='relu'))
-	model.add(Flatten())
-	model.add(Dense(100, activation='relu'))
-	model.add(Dropout(0.5))
-	model.add(Dense(50, activation='relu'))
-	model.add(Dropout(0.5))
-	model.add(Dense(10, activation='relu'))
-	model.add(Dropout(0.5))
-	model.add(Dense(1))
-
-	model.compile(optimizer='adam', loss='mean_squared_error')
+		model.compile(optimizer='adam', loss='mean_squared_error')
 
 	print("Start training model:")
 	model.fit_generator(data.train_generator(),
@@ -81,7 +85,8 @@ def main(_):
 		nb_epoch=FLAGS.epochs, 
 		verbose=2, 
 		validation_data=data.validation_generator(),
-		nb_val_samples=data.num_validation)
+		nb_val_samples=data.num_validation,
+		initial_epoch=FLAGS.initial_epoch)
 
 	print("Finished training model!")
 
