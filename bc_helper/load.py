@@ -33,6 +33,9 @@ def load_starter_data():
 def load_augmented_starter_data():
 	return _load_df('augmented_starter', _create_augmented_starter_data)
 
+def load_final_data():
+	return _load_df('final', _create_final_data_set)
+
 def _all_original_data():
 	return _original_data_frame(['smooth', 'recovery'])
 
@@ -42,18 +45,16 @@ def _original_smooth_data():
 def _all_starter_data():
 	return _original_data_frame(['starter_data'])
 
+def _all_final_data():
+	return _original_data_frame(['trouble_areas_mouse', 'track_2_mouse', 'starter_data'])
+
 def _original_data_frame(folders):
 	csv_name = 'driving_log.csv'
-	columns = ['center','left','right','steering','throttle','brake','speed']
+	columns = ['center', 'left', 'right', 'steering', 'throttle', 'brake', 'speed']
 	frames = []
 	for folder in folders:
-		if folder != "starter_data":
-			for subfolder in os.listdir(full_data_path(folder)):
-				s_path = full_data_path("{}/{}".format(folder, subfolder))
-				if os.path.isdir(s_path):
-					frames.append(pd.read_csv(s_path + "/" + csv_name, names=columns)[['steering', 'center', 'left', 'right']])
-		else:
-			s_path = full_data_path(folder)
+		for subfolder in os.listdir(full_data_path(folder)):
+			s_path = full_data_path("{}/{}".format(folder, subfolder))
 			if os.path.isdir(s_path):
 				frames.append(pd.read_csv(s_path + "/" + csv_name, names=columns)[['steering', 'center', 'left', 'right']])
 
@@ -81,12 +82,12 @@ def _create_augmented_starter_data():
 	right = []
 	center = []
 	for index, row in df.iterrows():
-	    left.append(pd.Series([row['steering'] + steering_delta, row['left'], False]))
-	    left.append(pd.Series([row['steering'] + steering_delta, row['left'], True]))
-	    right.append(pd.Series([row['steering'] - steering_delta, row['right'], False]))
-	    right.append(pd.Series([row['steering'] - steering_delta, row['right'], True]))
-	    center.append(pd.Series([row['steering'], row['center'], False]))
-	    center.append(pd.Series([row['steering'], row['center'], True]))
+		left.append(pd.Series([row['steering'] + steering_delta, row['left'], False]))
+		left.append(pd.Series([row['steering'] + steering_delta, row['left'], True]))
+		right.append(pd.Series([row['steering'] - steering_delta, row['right'], False]))
+		right.append(pd.Series([row['steering'] - steering_delta, row['right'], True]))
+		center.append(pd.Series([row['steering'], row['center'], False]))
+		center.append(pd.Series([row['steering'], row['center'], True]))
 	    
 	left = pd.DataFrame(left)
 	right = pd.DataFrame(right)
@@ -94,6 +95,34 @@ def _create_augmented_starter_data():
 	new = pd.concat([left, right, center])
 	new.columns = ['steering', 'center', 'flip']
 	return new
+
+def _create_final_data_set():
+	steering_delta = 0.4
+	df = _all_final_data()
+	left = []
+	right = []
+	center = []
+	for index, row in df.iterrows():
+		# left
+		if row.isnull()[2] == False:
+			left.append(pd.Series([row['steering'] + steering_delta, row['left'], False]))
+			left.append(pd.Series([row['steering'] + steering_delta, row['left'], True]))
+
+	    #right
+		if row.isnull()[3] == False:
+			right.append(pd.Series([row['steering'] - steering_delta, row['right'], False]))
+			right.append(pd.Series([row['steering'] - steering_delta, row['right'], True]))
+
+		#center
+		center.append(pd.Series([row['steering'], row['center'], False]))
+		center.append(pd.Series([row['steering'], row['center'], True]))
+	    
+	left = pd.DataFrame(left)
+	right = pd.DataFrame(right)
+	center = pd.DataFrame(center)
+	new = pd.concat([left, right, center])
+	new.columns = ['steering', 'center', 'flip']
+	return new	
 
 
 

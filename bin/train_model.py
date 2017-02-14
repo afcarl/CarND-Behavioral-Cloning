@@ -9,11 +9,13 @@ sys.path.append(project_path)
 from bc_helper.load import load_simple_data
 from bc_helper.load import load_starter_data
 from bc_helper.load import load_augmented_starter_data
+from bc_helper.load import load_final_data
 from bc_helper.simulator_data import SimulatorData
 from bc_helper.full_path import full_path
 from bc_helper import s3
 
 from keras.layers.normalization import BatchNormalization
+from keras.layers import Cropping2D, Lambda
 from keras.layers.core import Dense, Activation, Flatten, Dropout
 from keras.layers.convolutional import Convolution2D
 from keras.models import Sequential
@@ -35,6 +37,8 @@ def main(_):
 		data_frame = load_starter_data()
 	elif FLAGS.dataset == "augmented_starter":
 		data_frame = load_augmented_starter_data()
+	elif FLAGS.dataset == "final":
+		data_frame = load_final_data()
 	else:
 		raise Exception("Unexpected dataset:", dataset)
 		
@@ -53,7 +57,8 @@ def main(_):
 	# - FCC(d=10)
 
 	model = Sequential()
-	model.add(BatchNormalization(input_shape=data.feature_shape))
+	model.add(Cropping2D(cropping=((50,20), (0,0)), input_shape=data.feature_shape))
+	model.add(Lambda(lambda x: (x / 255.0) - 0.5))
 	model.add(Convolution2D(24, 5, 5, border_mode='same', activation='relu', subsample=(2, 2)))
 	model.add(Convolution2D(36, 5, 5, border_mode='same', activation='relu', subsample=(2, 2)))
 	model.add(Convolution2D(48, 5, 5, border_mode='same', activation='relu', subsample=(2, 2)))

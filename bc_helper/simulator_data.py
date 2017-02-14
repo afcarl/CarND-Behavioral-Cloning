@@ -22,7 +22,14 @@ class SimulatorData(object):
 
 	def labels(self, indices):
 		# label selection based on array of indices.
-		return self._df['steering'].iloc[indices]
+		return [self._label(index) for index in indices]
+
+	def _label(self, index):
+		steering = self._df['steering'][index]
+		if self._df['flip'][index]:
+			return -steering
+		else:
+			return steering
 
 	def features(self, indices):
 		# features selection based on array of indices.
@@ -32,7 +39,7 @@ class SimulatorData(object):
 		image = img_to_array(load_img(self._convertLocalAbsolutePath(self._df['center'][index])))
 		should_flip = self._df['flip'][index]
 		if should_flip == True:
-			return cv2.flip(image, 0)
+			return np.fliplr(image)
 		else:
 			return image
 
@@ -50,10 +57,7 @@ class SimulatorData(object):
 
 	# Useful when on aws
 	def _convertLocalAbsolutePath(self, path):
-		if path.find("/CarND-Behavioral-Cloning/") != -1:
-			rel_path = path.split("/CarND-Behavioral-Cloning/")[1]	
-		else:
-			rel_path = "data/starter_data/" + path.strip()
+		rel_path = path.split("/CarND-Behavioral-Cloning/")[1]
 		return full_path(rel_path)
 
 
