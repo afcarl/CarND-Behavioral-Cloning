@@ -14,7 +14,7 @@ The goals / steps of this project are the following:
 [image2]: ./examples/left_1.jpg "Left Image"
 [image3]: ./examples/right_1.jpg "Right Image"
 [image4]: ./examples/trouble_red.jpg "Red markers Image"
-[image5]: ./examples/bridge.jpd "Bridge Iamge"
+[image5]: ./examples/bridge.jpg "Bridge Iamge"
 [image6]: ./examples/track2_1.jpg "Track 2 Image"
 [image7]: ./examples/non_flip.jpg "Non-Flipped Image"
 [image8]: ./examples/flip.jpg "Flipped Image"
