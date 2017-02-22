@@ -6,6 +6,8 @@ import sys
 import threading
 from bc_helper.full_path import full_path
 
+# Save and fetch data and saved models from S3. Useful for working between AWS and local machine.
+
 bucket_name = 'kd-carnd'
 key_name = 'behavioral_cloning/'
 region_name = 'us-east-2'

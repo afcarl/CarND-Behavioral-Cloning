@@ -11,6 +11,8 @@ from bc_helper.full_path import full_path
 from bc_helper import s3
 import tensorflow as tf
 
+# Generate bottleneck data for VGG16. Not used in the final result of the project. 
+
 def files(dataset, batch_size):
 	train_output_file = "{}_{}_{}.p".format(dataset, batch_size, 'bottleneck_features_train')
 	validation_output_file = "{}_{}_{}.p".format(dataset, batch_size, 'bottleneck_features_validation')

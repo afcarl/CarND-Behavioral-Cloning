@@ -4,6 +4,8 @@ import tensorflow as tf
 import sys
 import os
 
+# Not used in final results of project. Tries to create bottleneck data for VGG16 model. 
+
 project_path, x = os.path.split(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(project_path)
 

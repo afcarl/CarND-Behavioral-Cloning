@@ -5,6 +5,9 @@ import zipfile
 from bc_helper import s3
 from bc_helper.full_path import full_path
 
+# Used to push and pull driving data to S3. Useful when working between AWS and local machine. 
+# Used in ./bin/get_data.py and ./bin/put_data.py.
+
 def zipdir(path, ziph):
 	# ziph is zipfile handle
 	for root, dirs, files in os.walk(path):

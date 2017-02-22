@@ -6,6 +6,8 @@ import os
 from bc_helper.simulator_data import SimulatorData
 from bc_helper.full_path import full_path
 
+# load_* functions return a DataFrame which ahs been cleaned for use with SimulatorData.
+
 def _load_df(file, df_loader):
 	data_frame_folder = 'data_frames'
 	data_frame_file = file

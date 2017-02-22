@@ -6,6 +6,8 @@ from keras.preprocessing.image import img_to_array, load_img
 import cv2
 from bc_helper.full_path import full_path
 
+# Light wrapper around DataFrame. Gives helper methods/properties to understand the
+# data in the DataFrame and provides and generator interface for use with Keras.
 class SimulatorData(object):
 	def __init__(self, data_frame, batch_size=32):
 		self._df = data_frame
